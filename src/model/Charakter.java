@@ -5,13 +5,13 @@ import java.util.List;
 public class Charakter {
     private int id;
     private String Name;
-    private String herkunftsort;
+    private String herkunftdorf;
     private List<Produkt> produkts;
 
-    public Charakter(int id, String Name, String herkunftsort, List<Produkt> produkts) {
+    public Charakter(int id, String Name, String herkunftdorf, List<Produkt> produkts) {
         this.id = id;
         this.Name = Name;
-        this.herkunftsort = herkunftsort;
+        this.herkunftdorf = herkunftdorf;
         this.produkts = produkts;
 
     }
@@ -32,12 +32,12 @@ public class Charakter {
         this.Name = name;
     }
 
-    public String getHerkunftsort() {
-        return herkunftsort;
+    public String getHerkunftdorf() {
+        return herkunftdorf;
     }
 
-    public void setHerkunftsort(String herkunftsort) {
-        this.herkunftsort = herkunftsort;
+    public void setHerkunftdorf(String herkunftdorf) {
+        this.herkunftdorf = herkunftdorf;
     }
 
     public List<Produkt> getModel1s() {
@@ -53,7 +53,7 @@ public class Charakter {
         return "model2{" +
                 "atr1=" + id +
                 ", atr2='" + Name + '\'' +
-                ", atr3='" + herkunftsort + '\'' +
+                ", atr3='" + herkunftdorf + '\'' +
                 ", model1s=" + produkts +
                 '}';
     }

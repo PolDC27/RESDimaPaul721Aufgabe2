@@ -101,11 +101,11 @@ public class Console {
                     break;
 
                 case 12:
-                    System.out.println(controller.ex2());
+                    System.out.println(controller.filterCharaktersByProdukts(takeStringChoice()));
                     break;
 
                 case 13:
-                    System.out.println(controller.ex3());
+                    System.out.println(controller.ex3(takeIntChoice(), takeStringChoice()));
                     break;
             }
         }

@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 
 public class Controller {
-    private final Repository<Produkt> model1Repository;
-    private final Repository<Charakter> model2Repository;
+    private final Repository<Produkt> produktRepository;
+    private final Repository<Charakter> charakterRepository;
 
-    public Controller(Repository<Produkt> model1Repository, Repository<Charakter> model2Repository) {
-        this.model1Repository = model1Repository;
-        this.model2Repository = model2Repository;
+    public Controller(Repository<Produkt> produktRepository, Repository<Charakter> charakterRepository) {
+        this.produktRepository = produktRepository;
+        this.charakterRepository = charakterRepository;
     }
 
 
@@ -32,7 +32,7 @@ public class Controller {
             System.out.println("Enter Model1 number: ");
             int model1Number = sc.nextInt();
             sc.nextLine();
-            if (model1Number < 0 || model1Number > model1Repository.getAll().size()) {
+            if (model1Number < 0 || model1Number > produktRepository.getAll().size()) {
                 break;
             }
 
@@ -63,7 +63,7 @@ public class Controller {
 
 
 
-        model1Repository.create(new Produkt(model1String, model1Double, model1Date));
+        produktRepository.create(new Produkt(model1String, model1Double, model1Date));
 
     }
 
@@ -74,9 +74,9 @@ public class Controller {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter Model1 atr1: ");
         String model1String = sc.nextLine();
-        for (Produkt produkt : model1Repository.getAll()) {
+        for (Produkt produkt : produktRepository.getAll()) {
             if (produkt.getName().equals(model1String)) {
-                model1Repository.delete(produkt);
+                produktRepository.delete(produkt);
                 System.out.println("Deleted Successfully");
                 break;
             }
@@ -89,9 +89,9 @@ public class Controller {
      * @return a Model1 object
      */
     public Produkt getModel1(String string) {
-        for (Produkt produkt : model1Repository.getAll()) {
+        for (Produkt produkt : produktRepository.getAll()) {
             if (produkt.getName().equals(string)) {
-                return model1Repository.get(produkt);
+                return produktRepository.get(produkt);
             }
         }
         return null;
@@ -113,14 +113,14 @@ public class Controller {
             System.out.println("Enter Model1 atr3: ");
             String model1Date = sc.nextLine();
 
-            model1Repository.update(getModel1(model1String), new Produkt(model1String, model1Double, model1Date));
+            produktRepository.update(getModel1(model1String), new Produkt(model1String, model1Double, model1Date));
         }
 
     }
 
 
     public List<Produkt> getAllModel1() {
-        return model1Repository.getAll();
+        return produktRepository.getAll();
     }
 
     /**
@@ -137,11 +137,11 @@ public class Controller {
         System.out.println("Enter Model2 atr3: ");
         String model2String2 = sc.nextLine();
 
-        for (int i = 0; i < model1Repository.getAll().size(); i++) {
-            System.out.println(i + "." + model1Repository.getAll().get(i));
+        for (int i = 0; i < produktRepository.getAll().size(); i++) {
+            System.out.println(i + "." + produktRepository.getAll().get(i));
         }
 
-        model2Repository.create(new Charakter(model2Int, model2String1, model2String2, createModel1List()));
+        charakterRepository.create(new Charakter(model2Int, model2String1, model2String2, createModel1List()));
 
     }
 
@@ -153,9 +153,9 @@ public class Controller {
         System.out.println("Enter Model2 atr1: ");
         int model2Int = sc.nextInt();
         sc.nextLine();
-        for (Charakter charakter : model2Repository.getAll()) {
+        for (Charakter charakter : charakterRepository.getAll()) {
             if (charakter.getId() == model2Int) {
-                model2Repository.delete(charakter);
+                charakterRepository.delete(charakter);
                 System.out.println("Deleted Successfully");
                 break;
             }
@@ -168,9 +168,9 @@ public class Controller {
      * @return a Model2 type object
      */
     public Charakter getModel2(int value) {
-        for (Charakter charakter : model2Repository.getAll()) {
+        for (Charakter charakter : charakterRepository.getAll()) {
             if (charakter.getId() == value) {
-                return model2Repository.get(charakter);
+                return charakterRepository.get(charakter);
             }
         }
         return null;
@@ -189,12 +189,12 @@ public class Controller {
             String model2String1 = sc.nextLine();
             System.out.println("Enter Model2 atr3: ");
             String model2String2 = sc.nextLine();
-            model2Repository.update(getModel2(model2Int), new Charakter(model2Int, model2String1, model2String2, createModel1List()));
+            charakterRepository.update(getModel2(model2Int), new Charakter(model2Int, model2String1, model2String2, createModel1List()));
         }
     }
 
     public List<Charakter> getAllModel2() {
-        return model2Repository.getAll();
+        return charakterRepository.getAll();
     }
 
     /**
@@ -203,9 +203,35 @@ public class Controller {
      */
     public List<String> filterCharakters(String herkunftsort){
         List<String> charakterList = new ArrayList<>();
-        for (Charakter charakter : model2Repository.getAll()) {
-            if (herkunftsort.equals(charakter.getHerkunftsort())) {
+        for (Charakter charakter : charakterRepository.getAll()) {
+            if (herkunftsort.equals(charakter.getHerkunftdorf())) {
                 charakterList.add(charakter.getName());
+            }
+        }
+        return charakterList;
+    }
+
+    /**
+     *
+     * @return filters charakters that have at least a produkt with a specific herkunftsregion sorted alphabetically
+     */
+    public List<String> filterCharaktersByProdukts(String herkunftsregion){
+        List<String> charakterList = new ArrayList<>();
+        for (Charakter charakter : charakterRepository.getAll()) {
+            for (Produkt produkt : charakter.getModel1s()){
+                if (produkt.getHerkunftsregion().equals(herkunftsregion) ) {
+                    charakterList.add(charakter.getName());
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < charakterList.size() - 1; i++) {
+            for (int j = i + 1; j < charakterList.size(); j++) {
+                if (charakterList.get(i).charAt(0) > charakterList.get(j).charAt(0)) {
+                    String temp = charakterList.get(i);
+                    charakterList.set(i, charakterList.get(j));
+                    charakterList.set(j, temp);
+                }
             }
         }
         return charakterList;
@@ -215,14 +241,10 @@ public class Controller {
      *
      * @return
      */
-    public Produkt ex2(){return null;}
 
-    /**
-     *
-     * @return
-     */
-
-    public Produkt ex3(){return null;}
+    public List<Produkt> ex3(int id, String sortType){
+        for ()
+    }
 
 
 
