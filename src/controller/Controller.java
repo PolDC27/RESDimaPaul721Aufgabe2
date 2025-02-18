@@ -243,7 +243,34 @@ public class Controller {
      */
 
     public List<Produkt> ex3(int id, String sortType){
-        for ()
+        for (Charakter charakter : charakterRepository.getAll()) {
+            if (charakter.getId() == id) {
+                if (sortType.equalsIgnoreCase("aufsteigend")) {
+                    for (int i = 0; i < charakter.getModel1s().size() - 1; i++) {
+                        for (int j = i + 1; j < charakter.getModel1s().size(); j++) {
+                            if (charakter.getModel1s().get(i).getPreis() > charakter.getModel1s().get(j).getPreis()) {
+                                Produkt temp = charakter.getModel1s().get(i);
+                                charakter.getModel1s().set(i, charakter.getModel1s().get(j));
+                                charakter.getModel1s().set(j, temp);
+                            }
+                        }
+                    }
+                    return charakter.getModel1s();
+                }else {
+                    for (int i = 0; i < charakter.getModel1s().size() - 1; i++) {
+                        for (int j = i + 1; j < charakter.getModel1s().size(); j++) {
+                            if (charakter.getModel1s().get(i).getPreis() < charakter.getModel1s().get(j).getPreis()) {
+                                Produkt temp = charakter.getModel1s().get(i);
+                                charakter.getModel1s().set(i, charakter.getModel1s().get(j));
+                                charakter.getModel1s().set(j, temp);
+                            }
+                        }
+                    }
+                    return charakter.getModel1s();
+                }
+            }
+        }
+        return null;
     }
 
 
