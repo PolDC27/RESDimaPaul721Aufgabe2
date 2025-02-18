@@ -199,9 +199,17 @@ public class Controller {
 
     /**
      *
-     * @return
+     * @return a list of charakters based on a herkunftsort
      */
-    public Produkt filterCharakters(){return null;}
+    public List<String> filterCharakters(String herkunftsort){
+        List<String> charakterList = new ArrayList<>();
+        for (Charakter charakter : model2Repository.getAll()) {
+            if (herkunftsort.equals(charakter.getHerkunftsort())) {
+                charakterList.add(charakter.getName());
+            }
+        }
+        return charakterList;
+    }
 
     /**
      *

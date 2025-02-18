@@ -97,7 +97,7 @@ public class Console {
                     break;
 
                 case 11:
-                    System.out.println(controller.filterCharakters());
+                    System.out.println(controller.filterCharakters(takeStringChoice()));
                     break;
 
                 case 12:
